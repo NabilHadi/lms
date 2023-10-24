@@ -7,24 +7,20 @@ export async function POST(
   { params }: { params: { courseId: string } }
 ) {
   try {
-    // check if the user is logged in
+    // Get the user id from the session, if no user id, return unauthorized error
     const { userId } = auth();
-
-    // if the user is not logged in, return unauthorized error
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // check if the person who is trying to add the attachment is the owner of the course
-    const courseOwner = await db.course.findUnique({
+    // Find the course in the databse where the course id and user id match, if no course found, return unauthorized error
+    const course = await db.course.findUnique({
       where: {
         id: params.courseId,
         userId: userId,
       },
     });
-
-    // if the person is not the owner of the course, return unauthorized error
-    if (!courseOwner) {
+    if (!course) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -52,7 +48,6 @@ export async function POST(
       },
     });
 
-    // return the chapter
     return NextResponse.json(chapter);
   } catch (error) {
     console.log("[CHAPTERS]", error);
