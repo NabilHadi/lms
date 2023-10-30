@@ -50,16 +50,12 @@ export async function DELETE(
       });
 
       if (existingMuxData) {
-        console.log(Video);
-
-        console.log(await Video.Assets.del(existingMuxData.assetId));
-        console.log(
-          await db.muxData.delete({
-            where: {
-              id: existingMuxData.id,
-            },
-          })
-        );
+        await Video.Assets.del(existingMuxData.assetId);
+        await db.muxData.delete({
+          where: {
+            id: existingMuxData.id,
+          },
+        });
       }
     }
 
