@@ -44,7 +44,7 @@ export async function DELETE(
       }
     }
 
-    const deletedCourse = db.course.delete({
+    const deletedCourse = await db.course.delete({
       where: {
         id: params.courseId,
       },
