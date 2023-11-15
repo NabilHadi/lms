@@ -22,6 +22,13 @@ export const ourFileRouter = {
   courseAttachment: f(["text", "image", "video", "audio", "pdf"])
     .middleware(() => handleAuth())
     .onUploadComplete(() => {}),
+  tutorMarkAssignment: f([
+    "pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ])
+    .middleware(() => handleAuth())
+    .onUploadComplete(() => {}),
   chapterVideo: f({ video: { maxFileSize: "64MB" } })
     .middleware(() => handleAuth())
     .onUploadComplete(() => {}),

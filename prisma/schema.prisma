@@ -22,6 +22,7 @@ model Course {
 
   chapters Chapter[]
   attachments Attachment[]
+  TutorMarkAssignment TutorMarkAssignment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -42,6 +43,26 @@ model Attachment {
   url String @db.Text
   size String
   key String
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+}
+
+model TutorMarkAssignment {
+  id String @id @default(uuid())
+  name String
+  url String @db.Text
+  size String
+  key String
+  
+  grade Int?
+  totalGrade Int
+  isMarked Boolean @default(false)
 
   courseId String
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)

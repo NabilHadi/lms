@@ -1,7 +1,13 @@
 import { IconBadge } from "@/components/ui/icon-badge";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
-import { File, LayoutDashboard, ListChecks } from "lucide-react";
+import {
+  Book,
+  BookOpenCheck,
+  File,
+  LayoutDashboard,
+  ListChecks,
+} from "lucide-react";
 import { redirect } from "next/navigation";
 
 import TitleForm from "./_compenents/title-form";
@@ -12,6 +18,7 @@ import AttachmentForm from "./_compenents/attachment-form";
 import ChaptersForm from "./_compenents/chapters-form";
 import Banner from "@/components/banner";
 import Actions from "./_compenents/actions";
+import TutorMarkAssignmentForm from "./_compenents/tutor-mark-assignment-form";
 
 const CourseIdPage = async ({
   params,
@@ -38,6 +45,11 @@ const CourseIdPage = async ({
         },
       },
       attachments: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+      TutorMarkAssignment: {
         orderBy: {
           createdAt: "desc",
         },
@@ -113,6 +125,16 @@ const CourseIdPage = async ({
               <h2 className="text-xl">Course Chapters</h2>
             </div>
             <ChaptersForm initialData={course} courseId={course.id} />
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={BookOpenCheck} />
+                <h2 className="text-xl">Tutor Mark Assignment (TMA)</h2>
+              </div>
+              <TutorMarkAssignmentForm
+                initialData={course}
+                courseId={course.id}
+              />
+            </div>
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={File} />
