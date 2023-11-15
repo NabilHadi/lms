@@ -20,6 +20,8 @@ interface AttachmentFormProps {
 const formSchema = z.object({
   url: z.string().min(1),
   name: z.string(),
+  key: z.string(),
+  size: z.number(),
 });
 
 const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
@@ -109,9 +111,9 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
         <div>
           <FileUpload
             endpoint="courseAttachment"
-            onUploadComplete={({ url, name }) => {
+            onUploadComplete={({ url, name, key, size }) => {
               if (url) {
-                onSubmit({ url, name: name ?? "" });
+                onSubmit({ url, name, key, size });
               }
             }}
           />

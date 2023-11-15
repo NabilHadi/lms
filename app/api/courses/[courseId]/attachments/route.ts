@@ -26,12 +26,14 @@ export async function POST(
     }
 
     // Get the attachment url from the request body
-    const { url, name } = await req.json();
+    const { url, name, key, size } = await req.json();
 
     // Add the attachment to the database
     const attachment = await db.attachment.create({
       data: {
         url: url,
+        key,
+        size: size + "",
         name: name ?? url.split("/").pop(),
         courseId: params.courseId,
       },

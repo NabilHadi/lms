@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { utapi } from "@/lib/uploadthingServer";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
@@ -31,6 +32,8 @@ export async function DELETE(
         id: params.attachmentId,
       },
     });
+
+    await utapi.deleteFiles(attachment.key);
 
     return NextResponse.json(attachment);
   } catch (error) {
