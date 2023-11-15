@@ -8,7 +8,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Attachment, Course } from "@prisma/client";
-import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/fie-upload";
@@ -20,6 +19,7 @@ interface AttachmentFormProps {
 
 const formSchema = z.object({
   url: z.string().min(1),
+  name: z.string(),
 });
 
 const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
@@ -109,9 +109,9 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
         <div>
           <FileUpload
             endpoint="courseAttachment"
-            onChange={(url) => {
+            onUploadComplete={({ url, name }) => {
               if (url) {
-                onSubmit({ url });
+                onSubmit({ url, name: name ?? "" });
               }
             }}
           />
