@@ -53,7 +53,7 @@ const TutorMarkAssignmentForm = ({
   const onDelete = async (id: string) => {
     try {
       setDeletingId(id);
-      // await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
+      await axios.delete(`/api/courses/${courseId}/tma/${id}`);
       toast.success("TMA deleted");
       router.refresh();
     } catch (error) {
