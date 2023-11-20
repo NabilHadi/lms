@@ -3,6 +3,8 @@ import Mux from "@mux/mux-node";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import { error } from "console";
+import { utapi } from "@/lib/uploadthingServer";
 
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID!,
@@ -114,7 +116,56 @@ export async function PATCH(
 
     const { isPublished, ...values } = await req.json();
 
-    const chapter = await db.chapter.update({
+    const chapter = await db.chapter.findUnique({
+      where: {
+        id: params.chapterId,
+        courseId: params.courseId,
+      },
+    });
+
+    if (!chapter) {
+      return new NextResponse("Not Found", { status: 404 });
+    }
+
+    if (values.videoUrl) {
+      const existingMuxData = await db.muxData.findFirst({
+        where: {
+          chapterId: chapter.id,
+        },
+      });
+
+      if (existingMuxData) {
+        await Video.Assets.del(existingMuxData.assetId).catch((error) => {
+          console.log("[MUX_DELETE]", error);
+        });
+
+        if (chapter.videoUrl) {
+          await utapi.deleteFiles(chapter.videoUrl.split("/").pop() ?? "");
+        }
+
+        await db.muxData.delete({
+          where: {
+            chapterId: chapter.id,
+          },
+        });
+      }
+
+      const asset = await Video.Assets.create({
+        input: values.videoUrl,
+        playback_policy: "public",
+        test: false,
+      });
+
+      await db.muxData.create({
+        data: {
+          chapterId: chapter.id,
+          assetId: asset.id,
+          playbackId: asset.playback_ids?.[0]?.id,
+        },
+      });
+    }
+
+    const updatedChapter = await db.chapter.update({
       where: {
         id: params.chapterId,
         courseId: params.courseId,
@@ -124,37 +175,7 @@ export async function PATCH(
       },
     });
 
-    if (values.videoUrl) {
-      const existingMuxData = await db.muxData.findFirst({
-        where: {
-          chapterId: params.chapterId,
-        },
-      });
-
-      if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
-        await db.muxData.delete({
-          where: {
-            id: existingMuxData.id,
-          },
-        });
-      }
-      const asset = await Video.Assets.create({
-        input: values.videoUrl,
-        playback_policy: "public",
-        test: false,
-      });
-
-      await db.muxData.create({
-        data: {
-          chapterId: params.chapterId,
-          assetId: asset.id,
-          playbackId: asset.playback_ids?.[0]?.id,
-        },
-      });
-    }
-
-    return NextResponse.json(chapter);
+    return NextResponse.json(updatedChapter);
   } catch (error) {
     console.log("[CHAPTER_ID_UPDATE]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
