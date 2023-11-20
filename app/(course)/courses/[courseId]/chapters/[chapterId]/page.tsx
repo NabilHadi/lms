@@ -19,12 +19,19 @@ const ChapterIdPage = async ({
     return redirect("/");
   }
 
-  const { chapter, course, muxData, attachments, nextChapter, userProgress } =
-    await getChapter({
-      userId,
-      chapterId: params.chapterId,
-      courseId: params.courseId,
-    });
+  const {
+    chapter,
+    course,
+    muxData,
+    attachments,
+    tutorMarkedAssignments,
+    nextChapter,
+    userProgress,
+  } = await getChapter({
+    userId,
+    chapterId: params.chapterId,
+    courseId: params.courseId,
+  });
 
   if (!chapter || !course) {
     return redirect("/");
@@ -65,10 +72,34 @@ const ChapterIdPage = async ({
           <div>
             <Preview value={chapter.description!} />
           </div>
+          {!!tutorMarkedAssignments.length && (
+            <>
+              <Separator />
+              <div className="p-4">
+                <h3 className="text-lg font-semibold mb-2">
+                  Tutor Marked Assignments
+                </h3>
+                {tutorMarkedAssignments.map((assignment) => (
+                  <a
+                    href={assignment.url}
+                    target="_blank"
+                    key={assignment.id}
+                    className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
+                  >
+                    <File />
+                    <p className="line-clamp-1">{assignment.name}</p>
+                  </a>
+                ))}
+              </div>
+            </>
+          )}
           {!!attachments.length && (
             <>
               <Separator />
               <div className="p-4">
+                <h3 className="text-lg font-semibold mb-2">
+                  Course Attachments
+                </h3>
                 {attachments.map((attachment) => (
                   <a
                     href={attachment.url}
