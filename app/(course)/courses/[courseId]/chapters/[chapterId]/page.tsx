@@ -7,6 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
 import { File } from "lucide-react";
 import CourseProgressButton from "./_components/course-progress-button";
+import StudentTMASubmissionForm from "./_components/student-tma-submission-form";
+import { getStudentTMASubmission } from "@/actions/get-student-tma-submissions";
 
 const ChapterIdPage = async ({
   params,
@@ -19,19 +21,18 @@ const ChapterIdPage = async ({
     return redirect("/");
   }
 
-  const {
-    chapter,
-    course,
-    muxData,
-    attachments,
-    tutorMarkedAssignments,
-    nextChapter,
-    userProgress,
-  } = await getChapter({
-    userId,
-    chapterId: params.chapterId,
-    courseId: params.courseId,
-  });
+  const { chapter, course, muxData, attachments, nextChapter, userProgress } =
+    await getChapter({
+      userId,
+      chapterId: params.chapterId,
+      courseId: params.courseId,
+    });
+
+  const { studentTMASubmission, tutorMarkedAssignments } =
+    await getStudentTMASubmission({
+      userId: userId,
+      courseId: params.courseId,
+    });
 
   if (!chapter || !course) {
     return redirect("/");
@@ -80,15 +81,22 @@ const ChapterIdPage = async ({
                   Tutor Marked Assignments
                 </h3>
                 {tutorMarkedAssignments.map((assignment) => (
-                  <a
-                    href={assignment.url}
-                    target="_blank"
-                    key={assignment.id}
-                    className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
-                  >
-                    <File />
-                    <p className="line-clamp-1">{assignment.name}</p>
-                  </a>
+                  <div key={assignment.id}>
+                    <a
+                      href={assignment.url}
+                      target="_blank"
+                      className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
+                    >
+                      <File />
+                      <p className="line-clamp-1">{assignment.name}</p>
+                    </a>
+                    <StudentTMASubmissionForm
+                      prevStudentTMASubmission={studentTMASubmission[0]}
+                      tmaTitle={assignment.name.split(".")[0]}
+                      courseId={course.id}
+                      tmaId={assignment.id}
+                    />
+                  </div>
                 ))}
               </div>
             </>

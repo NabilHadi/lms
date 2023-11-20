@@ -23,6 +23,7 @@ model Course {
   chapters Chapter[]
   attachments Attachment[]
   TutorMarkAssignment TutorMarkAssignment[]
+  StudentTMASubmission StudentTMASubmission[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -59,18 +60,54 @@ model TutorMarkAssignment {
   url String @db.Text
   size String
   key String
-  
-  grade Int?
   totalGrade Int
-  isMarked Boolean @default(false)
 
   courseId String
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  studentTmaSumissions StudentTMASubmission[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([courseId])
+}
+
+model StudentTMASubmission {
+  id String @id @default(uuid())
+  name String
+  url String @db.Text
+  size String
+  key String
+  studentId String
+  grade Int?
+  isMarked Boolean @default(false)
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  tmaId String
+  tma TutorMarkAssignment @relation(fields: [tmaId], references: [id])
+
+  markedFile TMAMarkedFile?
+
+
+  @@index([courseId])
+  @@index([tmaId])
+}
+
+model TMAMarkedFile {
+  id String @id @default(uuid())
+  name String
+  url String @db.Text
+  size String
+  key String
+  studentId String
+
+  studentTmaSumissionId String @unique
+  studentTmaSumission StudentTMASubmission @relation(fields: [studentTmaSumissionId], references: [id], onDelete: Cascade)
+
+
+  @@index([studentTmaSumissionId])
 }
 
 model Chapter {
