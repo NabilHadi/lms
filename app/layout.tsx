@@ -1,12 +1,10 @@
+import "@smastrom/react-rating/style.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import ToastProvider from "@/components/providers/toaster-provider";
 import { ConfettiProvider } from "@/components/providers/confetti-provider";
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "./api/uploadthing/core";
 
 const inter = Inter({ subsets: ["latin"] });
 

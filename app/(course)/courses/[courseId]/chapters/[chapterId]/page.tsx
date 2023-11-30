@@ -9,6 +9,9 @@ import { File } from "lucide-react";
 import CourseProgressButton from "./_components/course-progress-button";
 import StudentTMASubmissionForm from "./_components/student-tma-submission-form";
 import { getStudentTMASubmission } from "@/actions/get-student-tma-submissions";
+import { Button } from "@/components/ui/button";
+import CourseReviewModal from "@/components/modals/course-review-modal";
+import CourseReviewButton from "./_components/course-review-button";
 
 const ChapterIdPage = async ({
   params,
@@ -122,6 +125,11 @@ const ChapterIdPage = async ({
               </div>
             </>
           )}
+          <Separator />
+          {/* Course Review Button */}
+          <div className="p-4">
+            <CourseReviewButton courseId={params.courseId} studentId={userId} />
+          </div>
         </div>
       </div>
     </div>

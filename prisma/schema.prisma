@@ -5,48 +5,49 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 model Course {
-  id String @id @default(uuid())
-  userId String
-  title String @db.Text
+  id          String  @id @default(uuid())
+  userId      String
+  title       String  @db.Text
   description String? @db.Text
-  imageUrl String? @db.Text
+  imageUrl    String? @db.Text
   isPublished Boolean @default(false)
 
   categoryId String?
-  category Category? @relation(fields: [categoryId], references: [id])
+  category   Category? @relation(fields: [categoryId], references: [id])
 
-  chapters Chapter[]
-  attachments Attachment[]
-  TutorMarkAssignment TutorMarkAssignment[]
+  chapters             Chapter[]
+  attachments          Attachment[]
+  TutorMarkAssignment  TutorMarkAssignment[]
   StudentTMASubmission StudentTMASubmission[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  StudentCourseReview StudentCourseReview[]
 
   @@index([categoryId])
   @@fulltext([title])
 }
 
 model Category {
-  id String @id @default(uuid())
-  name String @unique
+  id      String   @id @default(uuid())
+  name    String   @unique
   courses Course[]
 }
 
 model Attachment {
-  id String @id @default(uuid())
+  id   String @id @default(uuid())
   name String
-  url String @db.Text
+  url  String @db.Text
   size String
-  key String
+  key  String
 
   courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -55,15 +56,15 @@ model Attachment {
 }
 
 model TutorMarkAssignment {
-  id String @id @default(uuid())
-  name String
-  url String @db.Text
-  size String
-  key String
+  id         String @id @default(uuid())
+  name       String
+  url        String @db.Text
+  size       String
+  key        String
   totalGrade Int
 
   courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   studentTmaSumissions StudentTMASubmission[]
 
@@ -74,54 +75,69 @@ model TutorMarkAssignment {
 }
 
 model StudentTMASubmission {
-  id String @id @default(uuid())
-  name String
-  url String @db.Text
-  size String
-  key String
+  id        String  @id @default(uuid())
+  name      String
+  url       String  @db.Text
+  size      String
+  key       String
   studentId String
-  grade Int?
-  isMarked Boolean @default(false)
+  grade     Int?
+  isMarked  Boolean @default(false)
 
   courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  tmaId String
-  tma TutorMarkAssignment @relation(fields: [tmaId], references: [id])
+  course   Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  tmaId    String
+  tma      TutorMarkAssignment @relation(fields: [tmaId], references: [id])
 
   markedFile TMAMarkedFile?
-
 
   @@index([courseId])
   @@index([tmaId])
 }
 
+model StudentCourseReview {
+  id          String @id @default(uuid())
+  studentId   String
+  courseId    String
+  course      Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  rating      Int
+  title       String @db.Text
+  review      String @db.Text
+  studentName String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([studentId])
+  @@index([courseId])
+}
+
 model TMAMarkedFile {
-  id String @id @default(uuid())
-  name String
-  url String @db.Text
-  size String
-  key String
+  id        String @id @default(uuid())
+  name      String
+  url       String @db.Text
+  size      String
+  key       String
   studentId String
 
-  studentTmaSumissionId String @unique
-  studentTmaSumission StudentTMASubmission @relation(fields: [studentTmaSumissionId], references: [id], onDelete: Cascade)
-
+  studentTmaSumissionId String               @unique
+  studentTmaSumission   StudentTMASubmission @relation(fields: [studentTmaSumissionId], references: [id], onDelete: Cascade)
 
   @@index([studentTmaSumissionId])
 }
 
 model Chapter {
-  id String @id @default(uuid())
-  title String
+  id          String  @id @default(uuid())
+  title       String
   description String? @db.Text
-  videoUrl String? @db.Text
-  position Int
+  videoUrl    String? @db.Text
+  position    Int
   isPublished Boolean @default(false)
 
   muxData MuxData?
 
   courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   userProgress UserProgress[]
 
@@ -132,26 +148,26 @@ model Chapter {
 }
 
 model MuxData {
-  id String @id @default(uuid())
-  assetId String
+  id         String  @id @default(uuid())
+  assetId    String
   playbackId String?
 
-  chapterId String @unique
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId String  @unique
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
 
 model UserProgress {
-  id String @id @default(uuid())
+  id     String @id @default(uuid())
   userId String
-  
+
   chapterId String
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   isCompleted Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([chapterId])
   @@unique([userId, chapterId])
+  @@index([chapterId])
 }
