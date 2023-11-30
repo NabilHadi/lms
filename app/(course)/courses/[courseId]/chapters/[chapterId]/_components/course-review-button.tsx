@@ -3,6 +3,7 @@
 import CourseReviewModal from "@/components/modals/course-review-modal";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 interface CourseReviewButtonProps {
@@ -14,6 +15,7 @@ const CourseReviewButton = ({
   courseId,
   studentId,
 }: CourseReviewButtonProps) => {
+  const router = useRouter();
   const onConfirm = async ({
     name,
     title,
@@ -41,6 +43,7 @@ const CourseReviewButton = ({
       });
 
       toast.success("Review submitted successfully");
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -48,7 +51,7 @@ const CourseReviewButton = ({
 
   return (
     <CourseReviewModal onConfirm={onConfirm}>
-      <Button className="w-full">Review Course</Button>
+      <Button className="w-full bg-sky-800">Review Course</Button>
     </CourseReviewModal>
   );
 };

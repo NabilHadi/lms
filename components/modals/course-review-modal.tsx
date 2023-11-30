@@ -2,7 +2,6 @@
 
 import {
   Dialog,
-  DialogPortal,
   DialogContent,
   DialogDescription,
   DialogHeader,

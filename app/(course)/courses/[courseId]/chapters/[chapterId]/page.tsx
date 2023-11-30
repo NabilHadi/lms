@@ -5,13 +5,13 @@ import { redirect } from "next/navigation";
 import VideoPlayer from "./_components/video-player";
 import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
-import { File } from "lucide-react";
+import { File, View } from "lucide-react";
 import CourseProgressButton from "./_components/course-progress-button";
 import StudentTMASubmissionForm from "./_components/student-tma-submission-form";
 import { getStudentTMASubmission } from "@/actions/get-student-tma-submissions";
-import { Button } from "@/components/ui/button";
-import CourseReviewModal from "@/components/modals/course-review-modal";
 import CourseReviewButton from "./_components/course-review-button";
+import ViewCourseReviewsButton from "./_components/view-course-reviews-button";
+import { getCourseReviews } from "@/actions/get-course-reviews";
 
 const ChapterIdPage = async ({
   params,
@@ -36,6 +36,10 @@ const ChapterIdPage = async ({
       userId: userId,
       courseId: params.courseId,
     });
+
+  const reviews = await getCourseReviews({
+    courseId: params.courseId,
+  });
 
   if (!chapter || !course) {
     return redirect("/");
@@ -127,8 +131,9 @@ const ChapterIdPage = async ({
           )}
           <Separator />
           {/* Course Review Button */}
-          <div className="p-4">
+          <div className="flex p-4 gap-4">
             <CourseReviewButton courseId={params.courseId} studentId={userId} />
+            <ViewCourseReviewsButton reviews={reviews} />
           </div>
         </div>
       </div>
