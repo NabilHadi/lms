@@ -6,7 +6,14 @@ import { StudentCourseReview } from "@prisma/client";
 import { Rating } from "@smastrom/react-rating";
 
 interface ViewCourseReviewsButtonProps {
-  reviews: StudentCourseReview[];
+  reviews: {
+    id: string;
+    studentName: string;
+    title: string;
+    review: string;
+    rating: number;
+    createdAt: String;
+  }[];
 }
 
 const ViewCourseReviewsButton = ({ reviews }: ViewCourseReviewsButtonProps) => {
@@ -38,14 +45,7 @@ const ViewCourseReviewsButton = ({ reviews }: ViewCourseReviewsButtonProps) => {
                 </div>
 
                 <div className="flex justify-between">
-                  <p className="text-sm text-gray-500">
-                    {review.createdAt.toLocaleDateString("en-us", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </p>
+                  <p className="text-sm text-gray-500">{review.createdAt}</p>
                 </div>
                 <h4 className="mt-2">{review.title}</h4>
                 <p className="text-gray-500">{review.review}</p>
