@@ -86,7 +86,7 @@ async function main() {
         studentName: faker.person.fullName(),
         createdAt: faker.date.between({
           from: "2023-01-01",
-          to: "2023-12-31",
+          to: "2023-12-5",
         }),
         updatedAt: faker.date.recent(),
       });
