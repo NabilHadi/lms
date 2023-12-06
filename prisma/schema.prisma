@@ -104,6 +104,7 @@ model StudentCourseReview {
   title       String @db.Text
   review      String @db.Text
   studentName String @db.Text
+  score       Decimal? @db.Decimal(10,5)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,8 +1,5 @@
 import { db } from "@/lib/db";
 
-import { PorterStemmer, SentimentAnalyzer, WordTokenizer } from "natural";
-import { removeStopwords } from "stopword";
-
 type MonthData = {
   month: string;
   monthNumber: number;
@@ -17,6 +14,8 @@ type YearData = MonthData[];
 
 export const getAnalytics = async (teacherId: string): Promise<YearData> => {
   try {
+    // TODO: ADD SENTIMENT ANALYSIS TO REVIEWS IN DATABASE
+
     const reviews = await db.studentCourseReview.findMany({
       where: {
         course: {
@@ -27,47 +26,6 @@ export const getAnalytics = async (teacherId: string): Promise<YearData> => {
         course: true,
       },
     });
-
-    const reviewsSentiment = reviews.map((item) => {
-      /**
-       * Removing non alphabetical and special characters
-       * Converting to lowercase
-       */
-      const alphaOnlyReview = item.review.replace(/[^a-zA-Z\s]+/g, "");
-
-      /**
-       * Tokenization
-       */
-      const tokenizer = new WordTokenizer();
-      const tokenizedText = tokenizer.tokenize(alphaOnlyReview) || [];
-
-      /** Remove stop words */
-      const filteredText = removeStopwords(tokenizedText);
-
-      const analyzer = new SentimentAnalyzer("English", PorterStemmer, "afinn");
-      const score = analyzer.getSentiment(filteredText);
-
-      let emotion = "";
-
-      if (score > 0.5) {
-        emotion = "Very positive";
-      } else if (score > 0) {
-        emotion = "Positive";
-      } else if (score < -0.5) {
-        emotion = "Very negative";
-      } else if (score < 0) {
-        emotion = "Negative";
-      } else {
-        emotion = "Neutral";
-      }
-
-      return {
-        ...item,
-        score,
-        emotion,
-      };
-    });
-
     const yearData: YearData = [];
 
     const currentYear = new Date().getFullYear();
@@ -88,7 +46,11 @@ export const getAnalytics = async (teacherId: string): Promise<YearData> => {
         averageRating: 0,
       };
 
-      reviewsSentiment.forEach((review) => {
+      reviews.forEach((review) => {
+        if (review.score === null) {
+          console.log("score is null", { review });
+          return;
+        }
         const reviewMonth = new Date(review.createdAt).getMonth() + 1;
         const reviewYear = new Date(review.createdAt).getFullYear();
 
@@ -96,9 +58,9 @@ export const getAnalytics = async (teacherId: string): Promise<YearData> => {
           monthData.numberOfReviews += 1;
           monthData.averageRating += review.rating;
 
-          if (review.score < 0) {
+          if (review.score.comparedTo(0) < 0) {
             monthData.numberOfNegativeReviews += 1;
-          } else if (review.score > 0) {
+          } else if (review.score.comparedTo(0) > 0) {
             monthData.numberOfPositiveReviews += 1;
           } else {
             monthData.numberOfNeutralReviews += 1;

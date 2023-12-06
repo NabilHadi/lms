@@ -1,6 +1,9 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
+import { PorterStemmer, SentimentAnalyzer, WordTokenizer } from "natural";
+import { removeStopwords } from "stopword";
+
 import { db } from "@/lib/db";
 
 export async function POST(
@@ -27,6 +30,24 @@ export async function POST(
 
     const { studentId, studentName, title, review, rating } = await req.json();
 
+    /**
+     * Removing non alphabetical and special characters
+     * Converting to lowercase
+     */
+    const alphaOnlyReview = review.replace(/[^a-zA-Z\s]+/g, "");
+
+    /**
+     * Tokenization
+     */
+    const tokenizer = new WordTokenizer();
+    const tokenizedText = tokenizer.tokenize(alphaOnlyReview) || [];
+
+    /** Remove stop words */
+    const filteredText = removeStopwords(tokenizedText);
+    const analyzer = new SentimentAnalyzer("English", PorterStemmer, "afinn");
+
+    const score = analyzer.getSentiment(filteredText);
+
     const courseReview = await db.studentCourseReview.create({
       data: {
         studentId,
@@ -34,6 +55,7 @@ export async function POST(
         title,
         review,
         rating,
+        score,
         courseId: params.courseId,
       },
     });
