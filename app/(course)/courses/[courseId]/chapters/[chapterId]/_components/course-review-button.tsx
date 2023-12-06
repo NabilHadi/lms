@@ -4,6 +4,7 @@ import CourseReviewModal from "@/components/modals/course-review-modal";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 interface CourseReviewButtonProps {
@@ -15,7 +16,9 @@ const CourseReviewButton = ({
   courseId,
   studentId,
 }: CourseReviewButtonProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
   const onConfirm = async ({
     name,
     title,
@@ -28,6 +31,7 @@ const CourseReviewButton = ({
     rating: number;
   }) => {
     try {
+      setIsLoading(true);
       await axios.post(`/api/courses/${courseId}/reviews`, {
         studentId: studentId,
         studentName: name,
@@ -46,12 +50,16 @@ const CourseReviewButton = ({
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <CourseReviewModal onConfirm={onConfirm}>
-      <Button className="w-full bg-sky-800">Review Course</Button>
+      <Button className="w-full bg-sky-800" disabled={isLoading}>
+        {isLoading ? "Submitting..." : "Submit Review"}
+      </Button>
     </CourseReviewModal>
   );
 };
