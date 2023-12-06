@@ -10,8 +10,8 @@ import CourseProgressButton from "./_components/course-progress-button";
 import StudentTMASubmissionForm from "./_components/student-tma-submission-form";
 import { getStudentTMASubmission } from "@/actions/get-student-tma-submissions";
 import CourseReviewButton from "./_components/course-review-button";
-import ViewCourseReviewsButton from "./_components/view-course-reviews-button";
-import { getCourseReviews } from "@/actions/get-course-reviews";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const ChapterIdPage = async ({
   params,
@@ -36,10 +36,6 @@ const ChapterIdPage = async ({
       userId: userId,
       courseId: params.courseId,
     });
-
-  const reviews = await getCourseReviews({
-    courseId: params.courseId,
-  });
 
   if (!chapter || !course) {
     return redirect("/");
@@ -130,10 +126,14 @@ const ChapterIdPage = async ({
             </>
           )}
           <Separator />
-          {/* Course Review Button */}
-          <div className="flex p-4 gap-4">
+          <div className="flex p-4 gap-4 items-center">
             <CourseReviewButton courseId={params.courseId} studentId={userId} />
-            <ViewCourseReviewsButton reviews={reviews} />
+            <Link
+              className="flex-shrink-0"
+              href={`/courses/${params.courseId}/reviews`}
+            >
+              <Button>See course Reviews</Button>
+            </Link>
           </div>
         </div>
       </div>

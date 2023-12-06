@@ -22,7 +22,7 @@ const reviews = [
     title: "Excellent Lessons!",
     review:
       "Excellent course! The lessons were engaging and I learned a lot. Looking forward to more courses like this.",
-    rating: 5,
+    rating: 4,
     score: 0.4375,
   },
   {
@@ -36,14 +36,14 @@ const reviews = [
     title: "Did Not Meet Expectations",
     review:
       "This course did not meet my expectations. The content was too basic and did not cover the topics in depth.",
-    rating: 1,
+    rating: 2,
     score: -0.4375,
   },
   {
     title: "Would Not Recommend",
     review:
       "I would not recommend this course. The lessons were disorganized and hard to follow.",
-    rating: 1,
+    rating: 2,
     score: -0.4375,
   },
   {
