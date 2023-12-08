@@ -12,6 +12,7 @@ import { getStudentTMASubmission } from "@/actions/get-student-tma-submissions";
 import CourseReviewButton from "./_components/course-review-button";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { db } from "@/lib/db";
 
 const ChapterIdPage = async ({
   params,
@@ -42,6 +43,15 @@ const ChapterIdPage = async ({
   }
 
   const completeOnEnd = !userProgress?.isCompleted;
+
+  const courseReviews = await db.studentCourseReview.findMany({
+    where: {
+      courseId: params.courseId,
+    },
+    select: {
+      id: true,
+    },
+  });
 
   return (
     <div>
@@ -128,12 +138,16 @@ const ChapterIdPage = async ({
           <Separator />
           <div className="flex p-4 gap-4 items-center">
             <CourseReviewButton courseId={params.courseId} studentId={userId} />
-            <Link
+            <Button
               className="flex-shrink-0"
-              href={`/courses/${params.courseId}/reviews`}
+              disabled={courseReviews.length === 0}
             >
-              <Button>See course Reviews</Button>
-            </Link>
+              <Link href={`/courses/${params.courseId}/reviews`}>
+                {courseReviews.length === 0
+                  ? "No reviews yet"
+                  : "See course Reviews"}
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
