@@ -154,6 +154,7 @@ export async function PATCH(
         input: values.videoUrl,
         playback_policy: "public",
         test: false,
+        encoding_tier: "baseline",
       });
 
       await db.muxData.create({
