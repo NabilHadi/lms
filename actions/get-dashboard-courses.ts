@@ -27,7 +27,11 @@ export const getDashboardCourses = async (
             course: {
               include: {
                 category: true,
-                chapters: true,
+                chapters: {
+                  where: {
+                    isPublished: true,
+                  },
+                },
               },
             },
           },
@@ -35,6 +39,8 @@ export const getDashboardCourses = async (
       },
     });
 
+    // Filter out duplicate courses
+    // Filter out unpublished courses
     const courses = userProgresses
       .filter((userProgress, index, array) => {
         return (
