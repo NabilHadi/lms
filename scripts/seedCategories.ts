@@ -12,7 +12,6 @@ async function main() {
         { name: "Mobile Development" },
         { name: "Data Science" },
         { name: "Artificial Intelligence" },
-        { name: "Machine Learning" },
       ],
     });
     console.log("Seeding finished.");
