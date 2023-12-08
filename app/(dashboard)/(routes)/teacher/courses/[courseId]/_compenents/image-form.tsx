@@ -83,9 +83,9 @@ const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
         <div>
           <FileUpload
             endpoint="courseImage"
-            onChange={(url) => {
-              if (url) {
-                onSubmit({ imageUrl: url });
+            onUploadComplete={(response) => {
+              if (response.url) {
+                onSubmit({ imageUrl: response.url });
               }
             }}
           />
