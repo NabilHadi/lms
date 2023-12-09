@@ -9,21 +9,21 @@ const reviews = [
     review:
       "This course was fantastic! The instructor was knowledgeable and the material was presented clearly and effectively.",
     rating: 5,
-    score: 0.4375,
+    score: 1,
   },
   {
     title: "Loved This Course!",
     review:
       "I loved this course! The content was relevant and up-to-date. I would highly recommend it to others.",
-    rating: 5,
+    rating: 4,
     score: 0.4375,
   },
   {
     title: "Excellent Lessons!",
     review:
       "Excellent course! The lessons were engaging and I learned a lot. Looking forward to more courses like this.",
-    rating: 4,
-    score: 0.4375,
+    rating: 3,
+    score: 0,
   },
   {
     title: "Disappointing Course",
@@ -50,15 +50,15 @@ const reviews = [
     title: "Decent Course",
     review:
       "This course was okay. The content was good, but the lessons could have been more engaging.",
-    rating: 3,
-    score: 0,
+    rating: 4,
+    score: 0.5,
   },
   {
     title: "Course Was Okay",
     review:
       "The course was decent. Some lessons were great, while others could use improvement.",
-    rating: 3,
-    score: 0,
+    rating: 5,
+    score: 1,
   },
   {
     title: "Satisfactory Course",
@@ -72,13 +72,13 @@ const reviews = [
 async function main() {
   try {
     let data = [];
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 30; i++) {
       const review = faker.helpers.arrayElement(reviews);
 
       data.push({
         id: faker.string.uuid(),
         studentId: "user_2WTIbPxURYKHPtC28NYwaU654Lg",
-        courseId: "ea6fe9a9-4781-4d59-8d2e-a476bf2b9e3b",
+        courseId: "343266ca-c1cb-4c2d-877c-b51717ef2239",
         rating: review.rating,
         title: review.title,
         review: review.review,

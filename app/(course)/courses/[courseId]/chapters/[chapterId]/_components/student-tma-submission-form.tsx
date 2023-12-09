@@ -17,6 +17,7 @@ interface StudentTMASubmissionFormProps {
   tmaTitle: string;
   courseId: string;
   tmaId: string;
+  totalGrade: number;
 }
 
 const formSchema = z.object({
@@ -32,6 +33,7 @@ const StudentTMASubmissionForm = ({
   tmaTitle,
   courseId,
   tmaId,
+  totalGrade,
 }: StudentTMASubmissionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -103,8 +105,13 @@ const StudentTMASubmissionForm = ({
                 <button
                   className="ml-auto hover:opacity-75 transition"
                   onClick={() => onDelete(prevStudentTMASubmission.id)}
+                  disabled={!!deletingId || !!prevStudentTMASubmission.isMarked}
                 >
-                  <X className="h-4 w-4" />
+                  {prevStudentTMASubmission.isMarked ? (
+                    <span className="font-semibold">{`Graded: ${prevStudentTMASubmission.grade} / ${totalGrade}`}</span>
+                  ) : (
+                    <X className="h-4 w-4" />
+                  )}
                 </button>
               )}
             </div>

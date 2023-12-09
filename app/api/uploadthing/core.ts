@@ -36,6 +36,13 @@ export const ourFileRouter = {
   ])
     .middleware(() => handleAuth())
     .onUploadComplete(() => {}),
+  tmaMarkedFile: f([
+    "pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ])
+    .middleware(() => handleAuth())
+    .onUploadComplete(() => {}),
   chapterVideo: f({ video: { maxFileSize: "64MB" } })
     .middleware(() => handleAuth())
     .onUploadComplete(() => {}),

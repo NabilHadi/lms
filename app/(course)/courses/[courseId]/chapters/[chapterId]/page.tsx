@@ -108,6 +108,7 @@ const ChapterIdPage = async ({
                       tmaTitle={assignment.name.split(".")[0]}
                       courseId={course.id}
                       tmaId={assignment.id}
+                      totalGrade={assignment.totalGrade}
                     />
                   </div>
                 ))}

@@ -152,6 +152,17 @@ const TutorMarkAssignmentForm = ({
           </div>
         </div>
       )}
+      {!isEditing && (
+        // Go to Student TMA submissions page
+        <div className="mt-4">
+          <Button
+            variant="outline"
+            onClick={() => router.push(`/teacher/courses/${courseId}/tma`)}
+          >
+            View TMA submissions
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
