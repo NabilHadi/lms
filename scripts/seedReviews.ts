@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
 const database = new PrismaClient();
 
 const { faker } = require("@faker-js/faker");
