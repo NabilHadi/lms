@@ -23,7 +23,7 @@ export const getStudentTMASubmission = async ({
     }
 
     let studentTMASubmission: StudentTMASubmission[] = [];
-    let tutorMarkedAssignments: TutorMarkAssignment[] = [];
+    let tutorMarkAssignments: TutorMarkAssignment[] = [];
 
     studentTMASubmission = await db.studentTMASubmission.findMany({
       where: {
@@ -32,7 +32,7 @@ export const getStudentTMASubmission = async ({
       },
     });
 
-    tutorMarkedAssignments = await db.tutorMarkAssignment.findMany({
+    tutorMarkAssignments = await db.tutorMarkAssignment.findMany({
       where: {
         courseId: course.id,
       },
@@ -40,13 +40,13 @@ export const getStudentTMASubmission = async ({
 
     return {
       studentTMASubmission,
-      tutorMarkedAssignments,
+      tutorMarkAssignments,
     };
   } catch (error) {
     console.log("[GET_STUDENT_TMA]", error);
     return {
       studentTMASubmission: [],
-      tutorMarkedAssignments: [],
+      tutorMarkAssignments: [],
     };
   }
 };

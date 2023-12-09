@@ -3,17 +3,18 @@
 import * as z from "zod";
 import axios from "axios";
 
-import { File, Loader2, PlusCircle, X } from "lucide-react";
+import { File, FileCheck, Loader2, PlusCircle, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { StudentTMASubmission } from "@prisma/client";
+import { StudentTMASubmission, TMAMarkedFile } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/fie-upload";
 
 interface StudentTMASubmissionFormProps {
   prevStudentTMASubmission?: StudentTMASubmission;
+  markedFile?: TMAMarkedFile | null;
   tmaTitle: string;
   courseId: string;
   tmaId: string;
@@ -30,6 +31,7 @@ const formSchema = z.object({
 
 const StudentTMASubmissionForm = ({
   prevStudentTMASubmission,
+  markedFile,
   tmaTitle,
   courseId,
   tmaId,
@@ -87,32 +89,48 @@ const StudentTMASubmissionForm = ({
       {!isEditing && (
         <>
           {prevStudentTMASubmission ? (
-            <div className="flex items-center mt-2 bg-slate-200 p-2 rounded">
-              <File />
-              <a
-                href={prevStudentTMASubmission.url}
-                target="_blank"
-                className="line-clamp-1 ml-2"
-              >
-                {prevStudentTMASubmission.name}
-              </a>
-              {deletingId === prevStudentTMASubmission.id && (
-                <div className="ml-auto ">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                </div>
-              )}
-              {deletingId !== prevStudentTMASubmission.id && (
-                <button
-                  className="ml-auto hover:opacity-75 transition"
-                  onClick={() => onDelete(prevStudentTMASubmission.id)}
-                  disabled={!!deletingId || !!prevStudentTMASubmission.isMarked}
+            <div className="flex flex-col">
+              <div className="flex items-center mt-2 bg-slate-200 p-2 rounded">
+                <File />
+                <a
+                  href={prevStudentTMASubmission.url}
+                  target="_blank"
+                  className="line-clamp-1 ml-2"
                 >
-                  {prevStudentTMASubmission.isMarked ? (
-                    <span className="font-semibold">{`Graded: ${prevStudentTMASubmission.grade} / ${totalGrade}`}</span>
-                  ) : (
-                    <X className="h-4 w-4" />
-                  )}
-                </button>
+                  {prevStudentTMASubmission.name}
+                </a>
+                {deletingId === prevStudentTMASubmission.id && (
+                  <div className="ml-auto ">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </div>
+                )}
+                {deletingId !== prevStudentTMASubmission.id && (
+                  <button
+                    className="ml-auto hover:opacity-75 transition"
+                    onClick={() => onDelete(prevStudentTMASubmission.id)}
+                    disabled={
+                      !!deletingId || !!prevStudentTMASubmission.isMarked
+                    }
+                  >
+                    {prevStudentTMASubmission.isMarked ? (
+                      <span className="font-semibold">{`Graded: ${prevStudentTMASubmission.grade} / ${totalGrade}`}</span>
+                    ) : (
+                      <X className="h-4 w-4" />
+                    )}
+                  </button>
+                )}
+              </div>
+              {markedFile && (
+                <div className="flex items-center mt-2 bg-lime-400 p-2 rounded">
+                  <FileCheck />
+                  <a
+                    href={markedFile.url}
+                    target="_blank"
+                    className="line-clamp-1 ml-2"
+                  >
+                    {markedFile.name}
+                  </a>
+                </div>
               )}
             </div>
           ) : (

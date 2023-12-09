@@ -32,7 +32,7 @@ const ChapterIdPage = async ({
       courseId: params.courseId,
     });
 
-  const { studentTMASubmission, tutorMarkedAssignments } =
+  const { studentTMASubmission, tutorMarkAssignments } =
     await getStudentTMASubmission({
       userId: userId,
       courseId: params.courseId,
@@ -50,6 +50,13 @@ const ChapterIdPage = async ({
     },
     select: {
       id: true,
+    },
+  });
+
+  const tmaMarkedFile = await db.tMAMarkedFile.findUnique({
+    where: {
+      studentId: userId,
+      studentTmaSumissionId: studentTMASubmission[0]?.id ?? "",
     },
   });
 
@@ -86,14 +93,14 @@ const ChapterIdPage = async ({
           <div>
             <Preview value={chapter.description!} />
           </div>
-          {!!tutorMarkedAssignments.length && (
+          {!!tutorMarkAssignments.length && (
             <>
               <Separator />
               <div className="p-4">
                 <h3 className="text-lg font-semibold mb-2">
                   Tutor Marked Assignments
                 </h3>
-                {tutorMarkedAssignments.map((assignment) => (
+                {tutorMarkAssignments.map((assignment) => (
                   <div key={assignment.id}>
                     <a
                       href={assignment.url}
@@ -109,6 +116,7 @@ const ChapterIdPage = async ({
                       courseId={course.id}
                       tmaId={assignment.id}
                       totalGrade={assignment.totalGrade}
+                      markedFile={tmaMarkedFile}
                     />
                   </div>
                 ))}
