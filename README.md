@@ -1,34 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Learning System Management (LMS) Project
 
-## Getting Started
+This README outlines the details on how to set up and run the project on your local machine. But since this project depends on enviormnet variables, you will need to contact me to get the .env file to run the project.
 
-First, run the development server:
+## Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+Before you begin, ensure you have met the following requirements:
+
+- Node.js (Preferably the latest stable version)
+- npm (Node Package Manager), which typically comes with Node.js
+- Git (Version Control System)
+
+## Installation
+
+To install the project, follow these steps:
+
+1. Clone the repository to your local machine:
+   ```
+   git clone https://github.com/NabilHadi/lms
+   ```
+2. Navigate to the project directory:
+   ```
+   cd lms
+   ```
+3. Install the necessary packages and dependencies:
+   ```
+   npm install
+   ```
+
+## Running the Project
+
+Once the installation is complete, you can run the project locally:
+
+1. Start the development server:
+   ```
+   npm run dev
+   ```
+2. Open your browser and go to `http://localhost:3000` to view the project.
+
+## Building for Production
+
+To build the project for production, use the following command:
+
+```
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This command creates an optimized production build of your application. After building, the `start` script will start a Node.js server that supports hybrid pages, serving both statically generated and server-side rendered pages.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Additional Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `npm run start`: Starts the application in production mode. The application should be compiled with `npm run build` first.
+- `npm run lint`: Runs ESLint for code quality checks.
 
-## Learn More
+## Support
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+For support or any questions, please reach out to me.

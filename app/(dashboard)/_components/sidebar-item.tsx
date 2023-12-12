@@ -25,7 +25,7 @@ export const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
   };
 
   return (
-    <button onClick={onClick} type="button">
+    <button data-test={`${label}-button`} onClick={onClick} type="button">
       <span
         className={cn(
           " h-max flex items-stretch  gap-x-2 text-slate-500 text-sm font-[500] pl-6 transition-all hover:text-slate-600 hover:bg-slate-300/20",

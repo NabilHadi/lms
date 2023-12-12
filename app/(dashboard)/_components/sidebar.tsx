@@ -5,7 +5,10 @@ import SideBarRoutes from "./sidebar-routes";
 
 const Sidebar = () => {
   return (
-    <div className="h-full border-r felx flex-col overflow-y-auto bg-white shadow-sm">
+    <div
+      data-id-test="sidebar"
+      className="h-full border-r felx flex-col overflow-y-auto bg-white shadow-sm"
+    >
       <div className="p-6 flex justify-center">
         <Logo />
       </div>
