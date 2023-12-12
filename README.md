@@ -8,7 +8,7 @@ Before you begin, ensure you have met the following requirements:
 
 - Node.js (Preferably the latest stable version)
 - npm (Node Package Manager), which typically comes with Node.js
-- Git (Version Control System)
+- Git (Version Control System). You can download it from [here](https://git-scm.com/downloads).
 
 ## Installation
 
